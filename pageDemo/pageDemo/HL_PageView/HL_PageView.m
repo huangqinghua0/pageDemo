@@ -8,7 +8,9 @@
 
 #import "HL_PageView.h"
 
-@interface HL_PageView ()<UIPageViewControllerDelegate , UIPageViewControllerDataSource , UIScrollViewDelegate> {
+@interface HL_PageView ()<UIPageViewControllerDelegate
+, UIPageViewControllerDataSource , UIScrollViewDelegate>
+{
     
     CGFloat _previousItemoffset;
     CGRect _previousItemFrame;
@@ -17,7 +19,6 @@
     CGFloat _norRed , _norGreen , _norBlue;
     CGFloat _selRed , _selGreen , _selBlue;
     UIColor *_titleNorColor , *_titleSelColor;
-
 }
 
 @property (nonatomic, strong) UIPageViewController *pageViewController;
@@ -55,6 +56,7 @@
 }
 
 - (void)setUpUI {
+    [self setUpScrollViewSubViews];
     [self addSubview:self.itemScrollView];
     [self addSubview:self.pageViewController.view];
     for (UIScrollView *scrollView in self.pageViewController.view.subviews) {
@@ -63,7 +65,6 @@
             self.pageVcScrollView = scrollView;
         }
     }
-    [self setUpScrollViewSubViews];
     self.selectedIndex = 0;
 }
 
@@ -120,19 +121,11 @@
 #pragma mark - UIScrollViewDelegate
 
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView {
-    
-    NSLog(@"scrollView.contentOffset.x: %f",scrollView.contentOffset.x);
-    //    NSInteger index = floor(scrollView.contentOffset.x / SCREEN_WIDTH) - 1;
-    //    if (!(index > 0 && index < self.childViewControllersArr.count - 1))  return;
-    
     CGFloat contentOffsetX = ABS(scrollView.contentOffset.x - _pageWidth);
     if (contentOffsetX <= 0) return;
-    
-    //    NSLog(@"scrollView.contentOffset.x : %f---- contentOffsetX : %f --- index:%zd",scrollView.contentOffset.x,contentOffsetX,index);
     CGFloat redOffset = _selRed - _norRed;
     CGFloat greenOffset = _selGreen - _norGreen;
     CGFloat blueOffset = _selBlue - _norBlue;
-    
     CGFloat prograss = contentOffsetX / _pageWidth;
     UIButton *nextBtn = self.itemScrollView.subviews[self.willSelctedIndex];
     CGFloat lineWidthOffset = nextBtn.frame.size.width - _previousItemFrame.size.width;
@@ -142,9 +135,7 @@
     CGFloat width = lineFrame.size.width;
     lineFrame.origin.x =  x + prograss *lineXOffset;
     lineFrame.size.width =  width + prograss *lineWidthOffset;
-    
     [nextBtn setTitleColor:[[UIColor alloc] initWithRed:(_norRed + redOffset*prograss)/255.0 green:(_norGreen + greenOffset*prograss)/255.0 blue:(_norBlue + blueOffset*prograss)/255.0 alpha:1] forState:UIControlStateNormal];
-    
     [self.selectedButton setTitleColor:[[UIColor alloc] initWithRed:(_selRed - redOffset*prograss)/255.0 green:(_selGreen - greenOffset*prograss)/255.0 blue:(_selBlue - blueOffset*prograss)/255.0 alpha:1] forState:UIControlStateNormal];
     
     CGFloat centerXOffset = nextBtn.center.x - _pageWidth/2.0;
@@ -154,35 +145,32 @@
         centerXOffset = 0;
     }
     [self.itemScrollView setContentOffset:CGPointMake(_previousItemoffset + (centerXOffset - _previousItemoffset )*prograss , 0)];
-    
-    
     self.selLine.frame = lineFrame;
-    //    NSLog(@"lineXOffset : %f -- prograss : %f --- freme :%@",lineXOffset,prograss,NSStringFromCGRect(lineFrame));
 }
 
 - (void)scrollViewDidEndScrollingAnimation:(UIScrollView *)scrollView {
     if (self.willSelctedIndex != self.selectedIndex && _isClickItem) {
         self.selectedIndex = self.willSelctedIndex;
-        _isClickItem = NO;
     }
+    _isClickItem = NO;
 }
 
 #pragma mark - 自定义按钮
 
 - (void)didClickItem:(UIButton *)item {
+    if (self.pageVcScrollView.isDecelerating) return;
     NSInteger index = item.tag;
     self.willSelctedIndex = index;
     NSInteger direction = index - self.selectedIndex;
     UIViewController *vc = self.childControllers[index];
     [self.pageViewController setViewControllers:@[vc] direction:direction < 0 animated:YES completion:nil];
-    //    self.selectedIndex = index;
     _isClickItem = YES;
 }
 
 #pragma mark - 私有方法
 
 - (void)setUpScrollViewSubViews {
-
+    
     CGFloat speaceW = 16;
     UIButton *previousBtn = nil;
     for (int i = 0; i < self.titles.count; ++i) {
@@ -208,19 +196,25 @@
 }
 
 - (void)getColorRGBColor:(UIColor *)color IsSelColor:(BOOL)isSelColor {
-    int numComponents = (int)CGColorGetNumberOfComponents(color.CGColor);
-    if (numComponents == 4) {
+    
+    CGFloat r=0,g=0,b=0,a=0;
+    if ([color respondsToSelector:@selector(getRed:green:blue:alpha:)]) {
+        [color getRed:&r green:&g blue:&b alpha:&a];
+    }else {
         const CGFloat *components = CGColorGetComponents(color.CGColor);
-        if (isSelColor) {
-            _selRed = components[0] ;_selGreen = components[1] ;_selBlue = components[2];
-        }else {
-            _norRed = components[0] ;_norGreen = components[1] ;_norBlue = components[2];
-        }
+        r = components[0];
+        g = components[1];
+        b = components[2];
+        a = components[3];
+    }
+    if (isSelColor) {
+        _selRed = r*255.0 ;_selGreen =g*255.0 ;_selBlue = b*255.0;
+    }else {
+        _norRed = r*255.0 ;_norGreen = g*255.0 ;_norBlue = b*255.0;
     }
 }
 
 #pragma mark - get/set
-
 
 - (void)setSelectedIndex:(NSInteger)selectedIndex {
     _selectedIndex = selectedIndex;
@@ -236,13 +230,16 @@
     }
     [self.itemScrollView setContentOffset:CGPointMake(centerXOffset , 0)];
     _previousItemoffset = self.itemScrollView.contentOffset.x;
-    NSLog(@"设定了吗");
     _previousItemFrame = self.selLine.frame;
-    
 }
 
 - (void)setTitleNorColor:(UIColor *)titleNorColor {
     _titleNorColor = titleNorColor;
+    for (UIButton *btn in self.itemScrollView.subviews) {
+        if ([btn isKindOfClass:[UIButton class]]) {
+            if (btn != self.selectedButton) [btn setTitleColor:self.titleNorColor forState:UIControlStateNormal];
+        }
+    }
     [self getColorRGBColor:titleNorColor IsSelColor:NO];
 }
 
@@ -250,21 +247,22 @@
     if (_titleNorColor == nil) {
         UIColor *norColor = [UIColor grayColor];
         [self getColorRGBColor:norColor IsSelColor:NO];
-        return norColor;
+        self.titleNorColor = norColor;
     }
     return _titleNorColor;
 }
 
 - (void)setTitleSelColor:(UIColor *)titleSelColor {
     _titleSelColor = titleSelColor;
+    [self.selectedButton setTitleColor:titleSelColor forState:UIControlStateNormal];
     [self getColorRGBColor:titleSelColor IsSelColor:YES];
 }
 
 - (UIColor *)titleSelColor {
     if (_titleSelColor == nil) {
-        UIColor *sleColor = [UIColor blackColor];
-        [self getColorRGBColor:sleColor IsSelColor:NO];
-        return sleColor;
+        UIColor *selColor = [UIColor blackColor];
+        [self getColorRGBColor:selColor IsSelColor:YES];
+        self.titleSelColor = selColor;
     }
     return _titleSelColor;
 }
@@ -301,3 +299,4 @@
 }
 
 @end
+
