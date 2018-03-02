@@ -14,7 +14,7 @@
     
     CGFloat _previousItemoffset;
     CGRect _previousItemFrame;
-    BOOL _isClickItem;
+    //    BOOL _isClickItem;
     CGFloat _pageWidth , _pageHeight;
     CGFloat _norRed , _norGreen , _norBlue;
     CGFloat _selRed , _selGreen , _selBlue;
@@ -38,6 +38,8 @@
 @property (nonatomic, strong) UIButton *selectedButton;
 
 @property (nonatomic, weak) UIScrollView *pageVcScrollView;
+
+@property (nonatomic, assign) BOOL isClickItem;
 
 @end
 @implementation HL_PageView
@@ -152,19 +154,19 @@
     if (self.willSelctedIndex != self.selectedIndex && _isClickItem) {
         self.selectedIndex = self.willSelctedIndex;
     }
-    _isClickItem = NO;
+    self.isClickItem = NO;
 }
 
 #pragma mark - 自定义按钮
 
 - (void)didClickItem:(UIButton *)item {
     if (self.pageVcScrollView.isDecelerating) return;
+    self.isClickItem = YES;
     NSInteger index = item.tag;
     self.willSelctedIndex = index;
     NSInteger direction = index - self.selectedIndex;
     UIViewController *vc = self.childControllers[index];
     [self.pageViewController setViewControllers:@[vc] direction:direction < 0 animated:YES completion:nil];
-    _isClickItem = YES;
 }
 
 #pragma mark - 私有方法
@@ -298,5 +300,9 @@
     return _pageViewController;
 }
 
+- (void)setIsClickItem:(BOOL)isClickItem {
+    _isClickItem = isClickItem;
+    self.pageVcScrollView.scrollEnabled = !isClickItem;
+}
 @end
 
