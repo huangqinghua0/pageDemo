@@ -155,12 +155,13 @@
         self.selectedIndex = self.willSelctedIndex;
     }
     self.isClickItem = NO;
+    [self checkTitleColor];
 }
 
 #pragma mark - 自定义按钮
 
 - (void)didClickItem:(UIButton *)item {
-    if (self.pageVcScrollView.isDecelerating || self.pageVcScrollView.isDragging) return;
+    if (self.pageVcScrollView.isDecelerating || self.pageVcScrollView.isDragging || item == self.selectedButton) return;
     self.isClickItem = YES;
     NSInteger index = item.tag;
     self.willSelctedIndex = index;
@@ -214,6 +215,15 @@
     }else {
         _norRed = r*255.0 ;_norGreen = g*255.0 ;_norBlue = b*255.0;
     }
+}
+
+- (void)checkTitleColor {
+    for (UIButton *btn in self.itemScrollView.subviews) {
+        if ([btn isKindOfClass:[UIButton class]]) {
+            if (btn != self.selectedButton) [btn setTitleColor:self.titleNorColor forState:UIControlStateNormal];
+        }
+    }
+    [self.selectedButton setTitleColor:self.titleSelColor forState:UIControlStateNormal];
 }
 
 #pragma mark - get/set
