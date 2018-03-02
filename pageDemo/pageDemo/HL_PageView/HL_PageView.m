@@ -160,7 +160,7 @@
 #pragma mark - 自定义按钮
 
 - (void)didClickItem:(UIButton *)item {
-    if (self.pageVcScrollView.isDecelerating) return;
+    if (self.pageVcScrollView.isDecelerating || self.pageVcScrollView.isDragging) return;
     self.isClickItem = YES;
     NSInteger index = item.tag;
     self.willSelctedIndex = index;
