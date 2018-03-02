@@ -7,16 +7,18 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		18D8B86A2048E70E00151EF4 /* HL_PageView.m in Sources */ = {isa = PBXBuildFile; fileRef = 18D8B8692048E70E00151EF4 /* HL_PageView.m */; };
 		9F68B92220485ED000BF8FEA /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 9F68B92120485ED000BF8FEA /* AppDelegate.m */; };
 		9F68B92520485ED000BF8FEA /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9F68B92420485ED000BF8FEA /* ViewController.m */; };
 		9F68B92820485ED000BF8FEA /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 9F68B92620485ED000BF8FEA /* Main.storyboard */; };
 		9F68B92A20485ED000BF8FEA /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 9F68B92920485ED000BF8FEA /* Assets.xcassets */; };
 		9F68B92D20485ED100BF8FEA /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 9F68B92B20485ED100BF8FEA /* LaunchScreen.storyboard */; };
 		9F68B93020485ED100BF8FEA /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 9F68B92F20485ED100BF8FEA /* main.m */; };
-		9F68B93920485FBF00BF8FEA /* HL_PageView.m in Sources */ = {isa = PBXBuildFile; fileRef = 9F68B93820485F8E00BF8FEA /* HL_PageView.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		18D8B8682048E70E00151EF4 /* HL_PageView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HL_PageView.h; sourceTree = "<group>"; };
+		18D8B8692048E70E00151EF4 /* HL_PageView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HL_PageView.m; sourceTree = "<group>"; };
 		9F68B91D20485ED000BF8FEA /* pageDemo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = pageDemo.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		9F68B92020485ED000BF8FEA /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		9F68B92120485ED000BF8FEA /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
@@ -27,8 +29,6 @@
 		9F68B92C20485ED100BF8FEA /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		9F68B92E20485ED100BF8FEA /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		9F68B92F20485ED100BF8FEA /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
-		9F68B93720485F8E00BF8FEA /* HL_PageView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = HL_PageView.h; sourceTree = "<group>"; };
-		9F68B93820485F8E00BF8FEA /* HL_PageView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = HL_PageView.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -42,6 +42,15 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		18D8B8672048E70E00151EF4 /* HL_PageView */ = {
+			isa = PBXGroup;
+			children = (
+				18D8B8682048E70E00151EF4 /* HL_PageView.h */,
+				18D8B8692048E70E00151EF4 /* HL_PageView.m */,
+			);
+			path = HL_PageView;
+			sourceTree = "<group>";
+		};
 		9F68B91420485ED000BF8FEA = {
 			isa = PBXGroup;
 			children = (
@@ -61,7 +70,7 @@
 		9F68B91F20485ED000BF8FEA /* pageDemo */ = {
 			isa = PBXGroup;
 			children = (
-				9F68B93620485F8E00BF8FEA /* HL_PageView */,
+				18D8B8672048E70E00151EF4 /* HL_PageView */,
 				9F68B92020485ED000BF8FEA /* AppDelegate.h */,
 				9F68B92120485ED000BF8FEA /* AppDelegate.m */,
 				9F68B92320485ED000BF8FEA /* ViewController.h */,
@@ -73,15 +82,6 @@
 				9F68B92F20485ED100BF8FEA /* main.m */,
 			);
 			path = pageDemo;
-			sourceTree = "<group>";
-		};
-		9F68B93620485F8E00BF8FEA /* HL_PageView */ = {
-			isa = PBXGroup;
-			children = (
-				9F68B93720485F8E00BF8FEA /* HL_PageView.h */,
-				9F68B93820485F8E00BF8FEA /* HL_PageView.m */,
-			);
-			path = HL_PageView;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -158,7 +158,7 @@
 				9F68B92520485ED000BF8FEA /* ViewController.m in Sources */,
 				9F68B93020485ED100BF8FEA /* main.m in Sources */,
 				9F68B92220485ED000BF8FEA /* AppDelegate.m in Sources */,
-				9F68B93920485FBF00BF8FEA /* HL_PageView.m in Sources */,
+				18D8B86A2048E70E00151EF4 /* HL_PageView.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

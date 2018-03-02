@@ -32,8 +32,8 @@
     HL_PageView *pageView = [[HL_PageView alloc]initWithFrame:CGRectMake(0, 64, SCREEN_WIDTH, SCREEN_HEIGHT - 64) superController:self titles:@[
                                                                                                                                                 @"全部0",@"粉丝福利1",@"自驾游2",@"亲子互动3",@"投资理财4",@"演讲交流5",@"电影KTV6",@"摄影7",@"美食8",@"同城交友9",
                                                                                                                                                 @"约炮10",@"有偿服务11",@"商业贷款12",@"裸贷们13",@"存金宝14",@"大染缸15",@"一点红16",@"碧螺春17",@"兴趣推荐18",@"还有更多吗19"] childControllers:self.childViewControllersArr];
-    pageView.titleNorColor = [UIColor blueColor];
-    pageView.titleSelColor = [UIColor purpleColor];
+//    pageView.titleNorColor = [UIColor blueColor];
+//    pageView.titleSelColor = [UIColor purpleColor];
     [self.view addSubview:pageView];
     
 }
