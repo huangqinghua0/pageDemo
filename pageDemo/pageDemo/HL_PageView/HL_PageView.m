@@ -150,12 +150,18 @@
     self.selLine.frame = lineFrame;
 }
 
+///调用系统api滚动结束方法
 - (void)scrollViewDidEndScrollingAnimation:(UIScrollView *)scrollView {
     if (self.willSelctedIndex != self.selectedIndex && _isClickItem) {
         self.selectedIndex = self.willSelctedIndex;
     }
     self.isClickItem = NO;
-    [self checkTitleColor];
+    [self handleItemColor];
+}
+
+///手动滚动结束方法
+- (void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView {
+    [self handleItemColor];
 }
 
 #pragma mark - 自定义按钮
@@ -217,7 +223,17 @@
     }
 }
 
-- (void)checkTitleColor {
+- (void)handleItemColor {
+    self.selLine.frame = CGRectMake(self.selectedButton.frame.origin.x, 41, self.selectedButton.frame.size.width, 3);
+    CGFloat centerXOffset = self.selectedButton.center.x - _pageWidth/2.0;
+    if (self.selectedButton.center.x  + _pageWidth/2.0 > self.itemScrollView.contentSize.width) centerXOffset = self.itemScrollView.contentSize.width - _pageWidth;//向后滚
+    if (centerXOffset < 0) {//往回滚
+        centerXOffset = 0;
+    }
+    [self.itemScrollView setContentOffset:CGPointMake(centerXOffset , 0)];
+    _previousItemoffset = self.itemScrollView.contentOffset.x;
+    _previousItemFrame = self.selLine.frame;
+    
     for (UIButton *btn in self.itemScrollView.subviews) {
         if ([btn isKindOfClass:[UIButton class]]) {
             if (btn != self.selectedButton) [btn setTitleColor:self.titleNorColor forState:UIControlStateNormal];
@@ -226,23 +242,13 @@
     [self.selectedButton setTitleColor:self.titleSelColor forState:UIControlStateNormal];
 }
 
+
 #pragma mark - get/set
 
 - (void)setSelectedIndex:(NSInteger)selectedIndex {
     _selectedIndex = selectedIndex;
-    [self.selectedButton setTitleColor:self.titleNorColor forState:UIControlStateNormal];
-    UIButton *btn = self.itemScrollView.subviews[selectedIndex];
-    [btn setTitleColor:self.titleSelColor forState:UIControlStateNormal];
-    self.selLine.frame = CGRectMake(btn.frame.origin.x, 41, btn.frame.size.width, 3);
-    self.selectedButton = btn;
-    CGFloat centerXOffset = btn.center.x - _pageWidth/2.0;
-    if (btn.center.x  + _pageWidth/2.0 > self.itemScrollView.contentSize.width) centerXOffset = self.itemScrollView.contentSize.width - _pageWidth;//向后滚
-    if (centerXOffset < 0) {//往回滚
-        centerXOffset = 0;
-    }
-    [self.itemScrollView setContentOffset:CGPointMake(centerXOffset , 0)];
-    _previousItemoffset = self.itemScrollView.contentOffset.x;
-    _previousItemFrame = self.selLine.frame;
+    self.selectedButton = self.itemScrollView.subviews[self.selectedIndex];
+    [self handleItemColor];
 }
 
 - (void)setTitleNorColor:(UIColor *)titleNorColor {
